@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { MessageCircle, Users } from "lucide-react";
 import type { Club } from "@/lib/tideline/types";
 import { Button } from "@/components/ui/button";
+import { FavoriteHeart } from "@/components/favorite-heart";
 import { SeaPhoto } from "@/components/sea-photo";
 import { useT } from "@/lib/tideline/place-store";
 import { countryLabel } from "@/lib/i18n";
@@ -11,13 +12,17 @@ import { SEA, spotPhoto } from "@/lib/tideline/sea";
 export function ClubCard({
   club,
   busy,
+  saved = false,
   onJoin,
   onLeave,
+  onToggleSave,
 }: {
   club: Club;
   busy?: boolean;
+  saved?: boolean;
   onJoin?: (id: number) => void;
   onLeave?: (id: number) => void;
+  onToggleSave?: (id: number) => void;
 }) {
   const t = useT();
   const locale = usePlaceStore((s) => s.locale);
@@ -28,6 +33,14 @@ export function ClubCard({
       <div className="relative h-24">
         <SeaPhoto src={photo} alt="" />
         <div className="absolute inset-0 bg-gradient-to-t from-surface to-transparent" />
+        {onToggleSave ? (
+          <FavoriteHeart
+            on={saved}
+            label={saved ? t("fav.added") : t("fav.add")}
+            onToggle={() => onToggleSave(club.id)}
+            className="absolute top-3 end-3 z-10"
+          />
+        ) : null}
       </div>
       <div className="p-5">
         <div className="flex items-start justify-between gap-3">

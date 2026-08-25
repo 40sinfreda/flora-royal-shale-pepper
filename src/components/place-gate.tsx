@@ -80,7 +80,7 @@ export function PlaceGate() {
     );
 
   return (
-    <SeaBackdrop src={SEA.swimmers} className="min-h-dvh" priority>
+    <SeaBackdrop src={SEA.swimmers} className="min-h-[calc(100dvh-4rem)]" priority>
       <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-16">
         <Logo />
         <p className="mt-10 text-xs font-medium uppercase tracking-widest text-accent">

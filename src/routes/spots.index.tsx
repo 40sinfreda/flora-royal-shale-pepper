@@ -6,6 +6,7 @@ import { SpotCard } from "@/components/spot-card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { listSpots } from "@/lib/tideline/api";
+import { useFavorites } from "@/lib/tideline/use-favorites";
 import { DIFFICULTIES, WATER_TYPES } from "@/lib/tideline/types";
 import { usePlaceFilter, useT } from "@/lib/tideline/place-store";
 import { useLoad } from "@/lib/tideline/use-load";
@@ -19,6 +20,7 @@ export const Route = createFileRoute("/spots/")({
 function SpotsPage() {
   const t = useT();
   const filter = usePlaceFilter();
+  const fav = useFavorites();
   const key = `${filter.country ?? ""}:${filter.region ?? ""}`;
   const loaded = useLoad(() => listSpots({ data: filter }), [key]);
   const data = loaded.data ?? [];
@@ -84,7 +86,12 @@ function SpotsPage() {
       </p>
       <div className="mt-4 grid gap-4 sm:grid-cols-2">
         {filtered.map((spot) => (
-          <SpotCard key={spot.id} spot={spot} />
+          <SpotCard
+            key={spot.id}
+            spot={spot}
+            saved={fav.isSpotSaved(spot.id)}
+            onToggleSave={(id) => void fav.toggleSpot(id)}
+          />
         ))}
       </div>
       {filtered.length === 0 && !loaded.loading ? (

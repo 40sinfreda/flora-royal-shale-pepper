@@ -11,6 +11,8 @@ import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Skeleton } from "@/components/ui/skeleton";
 import { COUNTRIES } from "@/lib/tideline/place";
+import { MapsPinField } from "@/components/maps-pin-field";
+import { mapsLinkFromPin, type MapsPin } from "@/lib/tideline/maps-pin";
 import { DIFFICULTIES, WATER_TYPES } from "@/lib/tideline/types";
 import { countryLabel } from "@/lib/i18n";
 import { localizeSpotField } from "@/lib/i18n/spot-copy";
@@ -273,12 +275,20 @@ function SpotForm({
   const [bestSeason, setBestSeason] = useState(spot?.bestSeason ?? "");
   const [hazards, setHazards] = useState(spot?.hazards ?? "");
   const [description, setDescription] = useState(spot?.description ?? "");
-  const [lat, setLat] = useState(spot ? String(spot.lat) : "");
-  const [lng, setLng] = useState(spot ? String(spot.lng) : "");
+  const [mapsLink, setMapsLink] = useState(
+    spot ? mapsLinkFromPin({ lat: spot.lat, lng: spot.lng }) : "",
+  );
+  const [pin, setPin] = useState<MapsPin | null>(
+    spot ? { lat: spot.lat, lng: spot.lng } : null,
+  );
   const [busy, setBusy] = useState(false);
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
+    if (!pin) {
+      toast.error(t("spotNew.mapsBad"));
+      return;
+    }
     const payload = {
       name,
       city,
@@ -290,8 +300,8 @@ function SpotForm({
       bestSeason,
       hazards,
       description,
-      lat: Number(lat),
-      lng: Number(lng),
+      lat: pin.lat,
+      lng: pin.lng,
     };
     setBusy(true);
     try {
@@ -362,14 +372,7 @@ function SpotForm({
       <Field label={t("spotNew.desc")}>
         <Textarea required minLength={8} value={description} onChange={(e) => setDescription(e.target.value)} />
       </Field>
-      <div className="grid grid-cols-2 gap-3">
-        <Field label={t("spotNew.lat")}>
-          <Input required type="number" step="0.0001" value={lat} onChange={(e) => setLat(e.target.value)} />
-        </Field>
-        <Field label={t("spotNew.lng")}>
-          <Input required type="number" step="0.0001" value={lng} onChange={(e) => setLng(e.target.value)} />
-        </Field>
-      </div>
+      <MapsPinField link={mapsLink} onLink={setMapsLink} pin={pin} onPin={setPin} />
       <FormActions
         busy={busy}
         canDelete={Boolean(spot)}

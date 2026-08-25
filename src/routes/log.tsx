@@ -33,7 +33,13 @@ function LogPage() {
   const place = usePlaceStore((s) => s.place);
   const { user, isPending } = useCurrentUserState();
   const { spot: preset } = Route.useSearch();
-  const spots = useLoad(() => listSpots({ data: {} }));
+  const spots = useLoad(
+    () =>
+      place?.country
+        ? listSpots({ data: { country: place.country } })
+        : Promise.resolve([]),
+    [place?.country],
+  );
   const [spotId, setSpotId] = useState("");
   const [swamOn, setSwamOn] = useState(format(new Date(), "yyyy-MM-dd"));
   const [distanceKm, setDistanceKm] = useState("2");
@@ -53,11 +59,10 @@ function LogPage() {
         return;
       }
     }
-    if (!spotId && place?.country) {
-      const local = spots.data.find((s) => s.country === place.country);
-      if (local) setSpotId(String(local.id));
+    if (!spotId && spots.data[0]) {
+      setSpotId(String(spots.data[0].id));
     }
-  }, [spots.data, preset, place?.country, spotId]);
+  }, [spots.data, preset, spotId]);
 
   if (isPending) {
     return (
@@ -69,11 +74,9 @@ function LogPage() {
   }
   if (!user) return <RedirectToSignIn />;
 
-  const ordered = [...(spots.data ?? [])].sort((a, b) => {
-    const ac = place?.country === a.country ? 0 : 1;
-    const bc = place?.country === b.country ? 0 : 1;
-    return ac - bc || a.name.localeCompare(b.name);
-  });
+  const ordered = [...(spots.data ?? [])].sort((a, b) =>
+    a.name.localeCompare(b.name),
+  );
 
   return (
     <Page className="max-w-xl">

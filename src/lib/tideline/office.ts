@@ -420,6 +420,7 @@ export const officeDeleteClub = createServerFn({ method: "POST" })
   .validator((id: number) => z.number().int().positive().parse(id))
   .handler(async ({ context, data: id }) => {
     const sql = await requireOwner(context.userId);
+    await sql`delete from saved_clubs where club_id = ${id}`;
     const rows = await sql<{ id: number }>`
       delete from clubs where id = ${id} returning id
     `;
@@ -925,6 +926,7 @@ export const officeDeletePerson = createServerFn({ method: "POST" })
     await sql`delete from club_members where user_id = ${userId}`;
     await sql`delete from rsvps where user_id = ${userId}`;
     await sql`delete from saved_spots where user_id = ${userId}`;
+    await sql`delete from saved_clubs where user_id = ${userId}`;
     await sql`delete from reports where user_id = ${userId}`;
     await sql`delete from swims where user_id = ${userId}`;
     await sql`delete from watch_links where user_id = ${userId}`;

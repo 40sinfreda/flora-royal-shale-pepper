@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { MessageCircle } from "lucide-react";
+import { Heart, MessageCircle } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { toast } from "sonner";
 import { Page } from "@/components/shell";
@@ -22,8 +22,10 @@ import {
 } from "@/lib/tideline/api";
 import { isWhatsappUrl } from "@/lib/tideline/place";
 import { isUnauthorized, useLoad } from "@/lib/tideline/use-load";
+import { useFavorites } from "@/lib/tideline/use-favorites";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { usePlaceFilter, usePlaceStore, useT } from "@/lib/tideline/place-store";
+import { cn } from "@/lib/utils";
 import { countryLabel } from "@/lib/i18n";
 import { localizeSpotField } from "@/lib/i18n/spot-copy";
 
@@ -57,6 +59,8 @@ function GroupPage() {
 
   const club = access.data ?? loaded;
   const [busy, setBusy] = useState(false);
+  const fav = useFavorites();
+  const isSaved = Boolean(club && fav.isClubSaved(club.id));
 
   if (!loaded && !access.loading) {
     return (
@@ -135,6 +139,15 @@ function GroupPage() {
           ) : null}
         </div>
         <div className="flex flex-wrap gap-2">
+          <Button
+            variant="outline"
+            onClick={() => {
+              if (club) void fav.toggleClub(club.id);
+            }}
+          >
+            <Heart className={cn("size-4", isSaved && "fill-current")} />
+            {isSaved ? t("fav.added") : t("fav.add")}
+          </Button>
           {club.isMember && club.whatsappUrl ? (
             <Button asChild>
               <a href={club.whatsappUrl} target="_blank" rel="noreferrer">

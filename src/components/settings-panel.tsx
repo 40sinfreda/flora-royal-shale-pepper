@@ -1,7 +1,9 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 import { Link } from "@tanstack/react-router";
-import { Settings } from "lucide-react";
+import { Settings, X } from "lucide-react";
 import { LookChips } from "@/components/look-picker";
+import { MarkPicker } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { getOfficeAccess } from "@/lib/tideline/office";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
@@ -42,6 +44,8 @@ export function SettingsBody({
 
   return (
     <div className="space-y-6">
+      <MarkPicker compact={compact} />
+
       <section className="space-y-2">
         <p className="text-xs uppercase tracking-widest text-faint">{t("settings.place")}</p>
         <p className="text-sm text-fg">{placeLabel}</p>
@@ -101,46 +105,69 @@ export function SettingsBody({
 export function SettingsMenu() {
   const t = useT();
   const [open, setOpen] = useState(false);
-  const wrap = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!open) return;
-    function onPointer(e: PointerEvent) {
-      if (wrap.current && !wrap.current.contains(e.target as Node)) setOpen(false);
-    }
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") setOpen(false);
     }
-    document.addEventListener("pointerdown", onPointer);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
     document.addEventListener("keydown", onKey);
     return () => {
-      document.removeEventListener("pointerdown", onPointer);
+      document.body.style.overflow = prev;
       document.removeEventListener("keydown", onKey);
     };
   }, [open]);
 
   return (
-    <div ref={wrap} className="relative">
+    <>
       <button
         type="button"
         aria-haspopup="dialog"
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
         className={cn(
-          "inline-flex h-11 items-center gap-2 rounded-md px-3 text-sm transition-colors",
+          "relative z-[1] inline-flex h-11 items-center gap-2 rounded-md px-3 text-sm transition-colors",
           open ? "bg-raised text-fg" : "text-muted hover:bg-raised hover:text-fg",
         )}
       >
         <Settings className="size-4" />
         <span className="hidden lg:inline">{t("nav.settings")}</span>
       </button>
-      {open ? (
-        <div className="absolute end-0 top-[calc(100%+0.5rem)] z-50 w-[min(22rem,calc(100vw-2rem))] rounded-xl bg-surface p-4 shadow-[var(--shadow-border)]">
-          <p className="mb-4 font-display text-lg font-semibold text-fg">{t("nav.settings")}</p>
-          <SettingsBody compact onNavigate={() => setOpen(false)} />
-        </div>
-      ) : null}
-    </div>
+      {open
+        ? createPortal(
+            <div className="fixed inset-0 z-[6000] flex items-start justify-center p-3 pt-20 sm:justify-end sm:p-6 sm:pt-20">
+              <button
+                type="button"
+                className="absolute inset-0 bg-bg/70 backdrop-blur-sm"
+                aria-label={t("nav.close")}
+                onClick={() => setOpen(false)}
+              />
+              <div
+                role="dialog"
+                aria-modal="true"
+                aria-label={t("nav.settings")}
+                className="relative z-10 max-h-[min(42rem,calc(100dvh-6rem))] w-[min(24rem,calc(100vw-1.5rem))] overflow-y-auto rounded-xl bg-surface p-5 shadow-[var(--shadow-border)]"
+              >
+                <div className="mb-4 flex items-center justify-between gap-3">
+                  <p className="font-display text-lg font-semibold text-fg">{t("nav.settings")}</p>
+                  <button
+                    type="button"
+                    className="grid size-11 place-items-center rounded-md text-muted hover:bg-raised hover:text-fg"
+                    aria-label={t("nav.close")}
+                    onClick={() => setOpen(false)}
+                  >
+                    <X className="size-4" />
+                  </button>
+                </div>
+                <SettingsBody compact onNavigate={() => setOpen(false)} />
+              </div>
+            </div>,
+            document.body,
+          )
+        : null}
+    </>
   );
 }
 

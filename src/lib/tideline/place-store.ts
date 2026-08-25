@@ -9,6 +9,7 @@ import {
   localeForCountry,
 } from "./place";
 import { applyLook, isLook, type Look } from "./look";
+import { isMark, type MarkId } from "./mark";
 
 type PlaceState = {
   hydrated: boolean;
@@ -17,11 +18,13 @@ type PlaceState = {
   locale: Locale;
   localeLocked: boolean;
   look: Look;
+  mark: MarkId;
   setHydrated: () => void;
   setEditing: (v: boolean) => void;
   setPlace: (place: Place, opts?: { lockLocale?: boolean }) => void;
   setLocale: (locale: Locale) => void;
   setLook: (look: Look) => void;
+  setMark: (mark: MarkId) => void;
   applyFromProfile: (row: {
     country: string | null;
     locale: string | null;
@@ -39,6 +42,7 @@ export const usePlaceStore = create<PlaceState>()(
       locale: "en",
       localeLocked: false,
       look: "night",
+      mark: "crest",
       setHydrated: () => set({ hydrated: true }),
       setEditing: (editing) => set({ editing }),
       setPlace: (place, opts) => {
@@ -53,6 +57,7 @@ export const usePlaceStore = create<PlaceState>()(
         applyLook(look);
         set({ look });
       },
+      setMark: (mark) => set({ mark }),
       applyFromProfile: (row) => {
         if (!row.country) return;
         const scope: Place["scope"] =
@@ -74,11 +79,13 @@ export const usePlaceStore = create<PlaceState>()(
         locale: s.locale,
         localeLocked: s.localeLocked,
         look: s.look,
+        mark: s.mark,
       }),
       merge: (persisted, current) => {
         const saved = (persisted ?? {}) as Partial<PlaceState>;
         const look = isLook(saved.look) ? saved.look : current.look;
-        return { ...current, ...saved, look };
+        const mark = isMark(saved.mark) ? saved.mark : current.mark;
+        return { ...current, ...saved, look, mark };
       },
       onRehydrateStorage: () => (state) => {
         if (state?.look) applyLook(state.look);

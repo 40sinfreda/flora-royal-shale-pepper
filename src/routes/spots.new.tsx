@@ -11,6 +11,8 @@ import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Skeleton } from "@/components/ui/skeleton";
 import { createSpot } from "@/lib/tideline/api";
+import { MapsPinField } from "@/components/maps-pin-field";
+import type { MapsPin } from "@/lib/tideline/maps-pin";
 import { COUNTRIES } from "@/lib/tideline/place";
 import { DIFFICULTIES, WATER_TYPES } from "@/lib/tideline/types";
 import { usePlaceStore, useT } from "@/lib/tideline/place-store";
@@ -38,8 +40,8 @@ function NewSpotPage() {
   const [bestSeason, setBestSeason] = useState("");
   const [hazards, setHazards] = useState("");
   const [description, setDescription] = useState("");
-  const [lat, setLat] = useState("");
-  const [lng, setLng] = useState("");
+  const [mapsLink, setMapsLink] = useState("");
+  const [pin, setPin] = useState<MapsPin | null>(null);
   const [busy, setBusy] = useState(false);
 
   if (isPending) {
@@ -66,6 +68,10 @@ function NewSpotPage() {
         className="mt-8 space-y-5"
         onSubmit={async (e) => {
           e.preventDefault();
+          if (!pin) {
+            toast.error(t("spotNew.mapsBad"));
+            return;
+          }
           setBusy(true);
           try {
             const res = await createSpot({
@@ -84,8 +90,8 @@ function NewSpotPage() {
                 bestSeason,
                 hazards,
                 description,
-                lat: lat ? Number(lat) : null,
-                lng: lng ? Number(lng) : null,
+                lat: pin.lat,
+                lng: pin.lng,
               },
             });
             void navigate({ to: "/spots/$slug", params: { slug: res.slug } });
@@ -153,14 +159,7 @@ function NewSpotPage() {
         <Field label={t("spotNew.desc")}>
           <Textarea required value={description} onChange={(e) => setDescription(e.target.value)} />
         </Field>
-        <div className="grid grid-cols-2 gap-3">
-          <Field label={t("spotNew.lat")}>
-            <Input type="number" step="0.0001" value={lat} onChange={(e) => setLat(e.target.value)} />
-          </Field>
-          <Field label={t("spotNew.lng")}>
-            <Input type="number" step="0.0001" value={lng} onChange={(e) => setLng(e.target.value)} />
-          </Field>
-        </div>
+        <MapsPinField link={mapsLink} onLink={setMapsLink} pin={pin} onPin={setPin} />
         <Button type="submit" className="w-full" disabled={busy}>
           {busy ? t("spotNew.saving") : t("spotNew.submit")}
         </Button>

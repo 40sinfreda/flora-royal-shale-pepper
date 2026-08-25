@@ -19,6 +19,7 @@ import {
 } from "@/lib/tideline/api";
 import { formatKm } from "@/lib/tideline/format";
 import { usePlaceFilter, usePlaceStore, useT } from "@/lib/tideline/place-store";
+import { useFavorites } from "@/lib/tideline/use-favorites";
 import { useLoad } from "@/lib/tideline/use-load";
 import { SEA } from "@/lib/tideline/sea";
 
@@ -36,6 +37,7 @@ function Home() {
   const gatherings = useLoad(() => listGatherings({ data: filter }), [key]);
   const clubs = useLoad(() => listClubs({ data: filter }), [key]);
   const stats = useLoad(() => getHomeStats({ data: filter }), [key]);
+  const fav = useFavorites();
 
   const featured = (spots.data ?? []).slice(0, 4);
   const upcoming = (gatherings.data ?? []).slice(0, 3);
@@ -51,9 +53,6 @@ function Home() {
           <h1 className="rise-in mt-4 max-w-3xl font-display text-2xl font-semibold leading-snug tracking-tight text-fg sm:text-4xl">
             {t("home.title")}
           </h1>
-          <p className="rise-in mt-4 max-w-lg text-base leading-relaxed text-fg/90 sm:text-lg">
-            {t("home.lead")}
-          </p>
           <div className="rise-in mt-4 max-w-xs">
             <TideRule />
           </div>
@@ -105,7 +104,13 @@ function Home() {
             </div>
             <div className="mt-6 grid gap-4 sm:grid-cols-2">
               {featured.map((spot) => (
-                <SpotCard key={spot.id} spot={spot} featured />
+                <SpotCard
+                  key={spot.id}
+                  spot={spot}
+                  featured
+                  saved={fav.isSpotSaved(spot.id)}
+                  onToggleSave={(id) => void fav.toggleSpot(id)}
+                />
               ))}
             </div>
           </section>
@@ -144,7 +149,12 @@ function Home() {
                 />
                 <div className="mt-6 flex flex-col gap-3">
                   {clubPreview.map((club) => (
-                    <ClubCard key={club.id} club={club} />
+                    <ClubCard
+                      key={club.id}
+                      club={club}
+                      saved={fav.isClubSaved(club.id)}
+                      onToggleSave={(id) => void fav.toggleClub(id)}
+                    />
                   ))}
                 </div>
               </div>

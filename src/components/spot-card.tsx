@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { MapPin } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { FavoriteHeart } from "@/components/favorite-heart";
 import { SeaPhoto } from "@/components/sea-photo";
 import type { Spot } from "@/lib/tideline/types";
 import {
@@ -11,17 +12,22 @@ import {
   waterLabel,
 } from "@/lib/tideline/format";
 import { spotPhoto } from "@/lib/tideline/sea";
-import { usePlaceStore } from "@/lib/tideline/place-store";
+import { usePlaceStore, useT } from "@/lib/tideline/place-store";
 import { regionLabel, countryLabel } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 export function SpotCard({
   spot,
   featured = false,
+  saved = false,
+  onToggleSave,
 }: {
   spot: Spot;
   featured?: boolean;
+  saved?: boolean;
+  onToggleSave?: (id: number) => void;
 }) {
+  const t = useT();
   const locale = usePlaceStore((s) => s.locale);
   const s = localizedSpot(spot, locale);
   const photo = spotPhoto(spot.slug, spot.waterType);
@@ -41,6 +47,14 @@ export function SpotCard({
           className="transition-transform duration-500 ease-out group-hover:scale-[1.04]"
         />
         <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-surface to-transparent" />
+        {onToggleSave ? (
+          <FavoriteHeart
+            on={saved}
+            label={saved ? t("fav.added") : t("fav.add")}
+            onToggle={() => onToggleSave(spot.id)}
+            className="absolute top-3 end-3 z-10"
+          />
+        ) : null}
       </div>
       <div className={cn("p-5", featured && "p-6")}>
         <div className="flex items-start justify-between gap-3">

@@ -13,6 +13,7 @@ import {
 import { isUnauthorized, useLoad } from "@/lib/tideline/use-load";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { usePlaceFilter, useT } from "@/lib/tideline/place-store";
+import { useFavorites } from "@/lib/tideline/use-favorites";
 import { SEA } from "@/lib/tideline/sea";
 import { SeaPhoto } from "@/components/sea-photo";
 
@@ -25,6 +26,7 @@ function GroupsPage() {
   const filter = usePlaceFilter();
   const key = `${filter.country ?? ""}:${filter.region ?? ""}`;
   const { user, isPending } = useCurrentUserState();
+  const fav = useFavorites();
   const clubs = useLoad(() => listClubs({ data: filter }), [key]);
   const mine = useLoad(async () => {
     if (isPending || !user) return [] as string[];
@@ -98,8 +100,10 @@ function GroupsPage() {
             key={club.id}
             club={club}
             busy={busyId === club.id}
+            saved={fav.isClubSaved(club.id)}
             onJoin={onJoin}
             onLeave={onLeave}
+            onToggleSave={(id) => void fav.toggleClub(id)}
           />
         ))}
       </div>

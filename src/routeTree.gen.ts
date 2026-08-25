@@ -11,11 +11,13 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as EventsRouteImport } from './routes/events'
+import { Route as FavoritesRouteImport } from './routes/favorites'
 import { Route as GroupsRouteImport } from './routes/groups'
 import { Route as LogRouteImport } from './routes/log'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as OfficeRouteImport } from './routes/office'
 import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SpotsRouteImport } from './routes/spots'
 import { Route as SyncRouteImport } from './routes/sync'
 import { Route as EventsIndexRouteImport } from './routes/events.index'
@@ -36,6 +38,11 @@ const IndexRoute = IndexRouteImport.update({
 const EventsRoute = EventsRouteImport.update({
   id: '/events',
   path: '/events',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FavoritesRoute = FavoritesRouteImport.update({
+  id: '/favorites',
+  path: '/favorites',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GroupsRoute = GroupsRouteImport.update({
@@ -61,6 +68,11 @@ const OfficeRoute = OfficeRouteImport.update({
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SpotsRoute = SpotsRouteImport.update({
@@ -122,11 +134,13 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/events': typeof EventsRouteWithChildren
+  '/favorites': typeof FavoritesRoute
   '/groups': typeof GroupsRouteWithChildren
   '/log': typeof LogRoute
   '/login': typeof LoginRoute
   '/office': typeof OfficeRoute
   '/profile': typeof ProfileRoute
+  '/settings': typeof SettingsRoute
   '/spots': typeof SpotsRouteWithChildren
   '/sync': typeof SyncRoute
   '/events/new': typeof EventsNewRoute
@@ -141,10 +155,12 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/favorites': typeof FavoritesRoute
   '/log': typeof LogRoute
   '/login': typeof LoginRoute
   '/office': typeof OfficeRoute
   '/profile': typeof ProfileRoute
+  '/settings': typeof SettingsRoute
   '/sync': typeof SyncRoute
   '/events/new': typeof EventsNewRoute
   '/groups/$slug': typeof GroupsSlugRoute
@@ -160,11 +176,13 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/events': typeof EventsRouteWithChildren
+  '/favorites': typeof FavoritesRoute
   '/groups': typeof GroupsRouteWithChildren
   '/log': typeof LogRoute
   '/login': typeof LoginRoute
   '/office': typeof OfficeRoute
   '/profile': typeof ProfileRoute
+  '/settings': typeof SettingsRoute
   '/spots': typeof SpotsRouteWithChildren
   '/sync': typeof SyncRoute
   '/events/new': typeof EventsNewRoute
@@ -182,11 +200,13 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/events'
+    | '/favorites'
     | '/groups'
     | '/log'
     | '/login'
     | '/office'
     | '/profile'
+    | '/settings'
     | '/spots'
     | '/sync'
     | '/events/new'
@@ -201,10 +221,12 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/favorites'
     | '/log'
     | '/login'
     | '/office'
     | '/profile'
+    | '/settings'
     | '/sync'
     | '/events/new'
     | '/groups/$slug'
@@ -219,11 +241,13 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/events'
+    | '/favorites'
     | '/groups'
     | '/log'
     | '/login'
     | '/office'
     | '/profile'
+    | '/settings'
     | '/spots'
     | '/sync'
     | '/events/new'
@@ -240,11 +264,13 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   EventsRoute: typeof EventsRouteWithChildren
+  FavoritesRoute: typeof FavoritesRoute
   GroupsRoute: typeof GroupsRouteWithChildren
   LogRoute: typeof LogRoute
   LoginRoute: typeof LoginRoute
   OfficeRoute: typeof OfficeRoute
   ProfileRoute: typeof ProfileRoute
+  SettingsRoute: typeof SettingsRoute
   SpotsRoute: typeof SpotsRouteWithChildren
   SyncRoute: typeof SyncRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
@@ -264,6 +290,13 @@ declare module '@tanstack/react-router' {
       path: '/events'
       fullPath: '/events'
       preLoaderRoute: typeof EventsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/favorites': {
+      id: '/favorites'
+      path: '/favorites'
+      fullPath: '/favorites'
+      preLoaderRoute: typeof FavoritesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/groups': {
@@ -299,6 +332,13 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/spots': {
@@ -426,11 +466,13 @@ const SpotsRouteWithChildren = SpotsRoute._addFileChildren(SpotsRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   EventsRoute: EventsRouteWithChildren,
+  FavoritesRoute: FavoritesRoute,
   GroupsRoute: GroupsRouteWithChildren,
   LogRoute: LogRoute,
   LoginRoute: LoginRoute,
   OfficeRoute: OfficeRoute,
   ProfileRoute: ProfileRoute,
+  SettingsRoute: SettingsRoute,
   SpotsRoute: SpotsRouteWithChildren,
   SyncRoute: SyncRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,

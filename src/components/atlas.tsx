@@ -106,7 +106,7 @@ export function Atlas({
     .find((spot) => spot.slug === (hover ?? activeSlug));
 
   return (
-    <div className="overflow-hidden rounded-xl bg-surface shadow-[var(--shadow-border)]">
+    <div className="relative z-0 isolate overflow-hidden rounded-xl bg-surface shadow-[var(--shadow-border)]">
       <div className="relative aspect-[2/1] w-full overflow-hidden">
         <div
           ref={hostRef}

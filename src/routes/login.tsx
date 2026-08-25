@@ -58,8 +58,8 @@ function Login() {
   }
 
   return (
-    <main className="grid min-h-dvh lg:grid-cols-2">
-      <section className="relative hidden min-h-dvh overflow-hidden lg:flex">
+    <main className="grid min-h-[calc(100dvh-4rem)] lg:grid-cols-2">
+      <section className="relative hidden min-h-[calc(100dvh-4rem)] overflow-hidden lg:flex">
         <img
           src="/sea/login.jpg"
           alt=""

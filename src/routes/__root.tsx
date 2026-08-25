@@ -60,18 +60,18 @@ function RootDocument() {
         <PreviewHostBridge />
         <AuthProvider>
           <PlaceProvider>
-            {login ? (
-              <Outlet />
-            ) : office ? (
-              <div className="flex min-h-dvh flex-col">
-                <Header />
-                <div className="flex-1">
+            <Header />
+            <div className="pt-16">
+              {login ? (
+                <Outlet />
+              ) : office ? (
+                <div className="min-h-[calc(100dvh-4rem)]">
                   <Outlet />
                 </div>
-              </div>
-            ) : (
-              <AppFrame />
-            )}
+              ) : (
+                <AppFrame />
+              )}
+            </div>
             <Toaster
               theme={look === "day" ? "light" : "dark"}
               position="bottom-center"
@@ -96,7 +96,7 @@ function AppFrame() {
 
   if (!hydrated) {
     return (
-      <main className="relative min-h-dvh overflow-hidden">
+      <main className="relative min-h-[calc(100dvh-4rem)] overflow-hidden">
         <img
           src="/sea/hero.jpg"
           alt=""
@@ -119,9 +119,8 @@ function AppFrame() {
   }
 
   return (
-    <div className="flex min-h-dvh flex-col">
+    <div className="flex min-h-[calc(100dvh-4rem)] flex-col">
       <WatchSyncBridge />
-      <Header />
       <div className="flex-1">
         <Outlet />
       </div>

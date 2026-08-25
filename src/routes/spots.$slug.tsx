@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Bookmark, BookmarkCheck, MapPin } from "lucide-react";
+import { Heart, MapPin } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Page } from "@/components/shell";
@@ -18,15 +18,14 @@ import {
   createReport,
   getSpot,
   listReports,
-  listSavedSpotIds,
   listSpotClubs,
   listSpotGatherings,
   listSpotSwims,
   listSpots,
   toggleRsvp,
-  toggleSaveSpot,
 } from "@/lib/tideline/api";
 import { useLoad, isUnauthorized } from "@/lib/tideline/use-load";
+import { useFavorites } from "@/lib/tideline/use-favorites";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import {
   difficultyLabel,
@@ -38,6 +37,7 @@ import {
   waterLabel,
 } from "@/lib/tideline/format";
 import { usePlaceStore, useT } from "@/lib/tideline/place-store";
+import { cn } from "@/lib/utils";
 import { regionLabel } from "@/lib/i18n";
 import { spotPhoto } from "@/lib/tideline/sea";
 import { SeaPhoto } from "@/components/sea-photo";
@@ -100,39 +100,8 @@ function SpotPage() {
         : Promise.resolve([]),
     [loaded.spot?.id],
   );
-  const saved = useLoad(async () => {
-    if (isPending || !user) return [] as number[];
-    try {
-      return await listSavedSpotIds();
-    } catch (err) {
-      if (isUnauthorized(err)) return [];
-      throw err;
-    }
-  }, [user?.id, isPending]);
-
-  const [saving, setSaving] = useState(false);
-  const isSaved = Boolean(
-    loaded.spot && saved.data?.includes(loaded.spot.id),
-  );
-
-  async function onSave() {
-    if (!loaded.spot) return;
-    if (!user) {
-      window.location.href = "/login";
-      return;
-    }
-    setSaving(true);
-    try {
-      const res = await toggleSaveSpot({ data: loaded.spot.id });
-      toast(res.saved ? t("toast.savedSpot") : t("toast.unsavedSpot"));
-      saved.reload();
-    } catch (err) {
-      if (isUnauthorized(err)) window.location.href = "/login";
-      else toast.error(t("toast.saveFail"));
-    } finally {
-      setSaving(false);
-    }
-  }
+  const fav = useFavorites();
+  const isSaved = Boolean(loaded.spot && fav.isSpotSaved(loaded.spot.id));
 
   if (!loaded.spot) {
     return (
@@ -175,13 +144,14 @@ function SpotPage() {
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Button variant="outline" onClick={onSave} disabled={saving}>
-            {isSaved ? (
-              <BookmarkCheck className="size-4" />
-            ) : (
-              <Bookmark className="size-4" />
-            )}
-            {isSaved ? t("spot.saved") : t("spot.save")}
+          <Button
+            variant="outline"
+            onClick={() => {
+              if (loaded.spot) void fav.toggleSpot(loaded.spot.id);
+            }}
+          >
+            <Heart className={cn("size-4", isSaved && "fill-current")} />
+            {isSaved ? t("fav.added") : t("fav.add")}
           </Button>
           <Button asChild>
             <Link to="/log" search={{ spot: s.slug }}>
@@ -264,7 +234,12 @@ function SpotPage() {
             <h2 className="font-display text-2xl text-fg">{t("spot.groups")}</h2>
             <div className="mt-4 flex flex-col gap-3">
               {(clubs.data ?? loaded.clubs).map((club) => (
-                <ClubCard key={club.id} club={club} />
+                <ClubCard
+                  key={club.id}
+                  club={club}
+                  saved={fav.isClubSaved(club.id)}
+                  onToggleSave={(id) => void fav.toggleClub(id)}
+                />
               ))}
             </div>
           </div>

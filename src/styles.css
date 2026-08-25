@@ -180,6 +180,17 @@ html[data-theme="day"] body {
 .atlas-map .leaflet-container {
   height: 100%;
   width: 100%;
+  z-index: 0;
+}
+
+.atlas-map .leaflet-pane,
+.atlas-map .leaflet-tile-pane,
+.atlas-map .leaflet-overlay-pane,
+.atlas-map .leaflet-shadow-pane,
+.atlas-map .leaflet-marker-pane,
+.atlas-map .leaflet-tooltip-pane,
+.atlas-map .leaflet-popup-pane {
+  z-index: 1;
 }
 
 .atlas-map .leaflet-control-zoom {

@@ -4,6 +4,7 @@ import { getSql } from "@/lib/db";
 import { authMiddleware } from "@/lib/auth/middleware";
 import { COUNTRIES, isWhatsappUrl, slugify } from "./place";
 import { MATCH_KM, haversineKm, nearestByKm } from "./geo";
+import { parseMapsPin } from "./maps-pin";
 import type {
   Club,
   ClubMember,
@@ -690,6 +691,57 @@ export const listSavedSpots = createServerFn({ method: "GET" })
     return rows.map(mapSpot);
   });
 
+export const toggleSaveClub = createServerFn({ method: "POST" })
+  .middleware([authMiddleware])
+  .validator((clubId: number) => clubId)
+  .handler(async ({ context, data: clubId }) => {
+    const sql = await getSql();
+    const existing = await sql<{ user_id: string }>`
+      select user_id from saved_clubs
+      where user_id = ${context.userId} and club_id = ${clubId}
+      limit 1
+    `;
+    if (existing[0]) {
+      await sql`
+        delete from saved_clubs
+        where user_id = ${context.userId} and club_id = ${clubId}
+      `;
+      return { saved: false };
+    }
+    await sql`
+      insert into saved_clubs (user_id, club_id)
+      values (${context.userId}, ${clubId})
+    `;
+    return { saved: true };
+  });
+
+export const listSavedClubIds = createServerFn({ method: "GET" })
+  .middleware([authMiddleware])
+  .handler(async ({ context }) => {
+    const sql = await getSql();
+    const rows = await sql<{ club_id: number }>`
+      select club_id from saved_clubs where user_id = ${context.userId}
+    `;
+    return rows.map((r) => r.club_id);
+  });
+
+export const listSavedClubs = createServerFn({ method: "GET" })
+  .middleware([authMiddleware])
+  .handler(async ({ context }) => {
+    const sql = await getSql();
+    const rows = await sql.query<ClubRow>(
+      `select ${CLUB_SELECT}
+       from saved_clubs sv
+       join clubs c on c.id = sv.club_id
+       left join spots s on s.id = c.spot_id
+       left join profiles p on p.user_id = c.admin_user_id
+       where sv.user_id = $1
+       order by sv.created_at desc`,
+      [context.userId],
+    );
+    return rows.map((row) => mapClub(row, { userId: context.userId }));
+  });
+
 export const toggleRsvp = createServerFn({ method: "POST" })
   .middleware([authMiddleware])
   .validator((eventId: number) => eventId)
@@ -748,6 +800,35 @@ export const createReport = createServerFn({ method: "POST" })
       )
     `;
     return { ok: true };
+  });
+
+export const resolveMapsPin = createServerFn({ method: "POST" })
+  .validator((input: unknown) => z.string().trim().min(4).max(2000).parse(input))
+  .handler(async ({ data }) => {
+    const direct = parseMapsPin(data);
+    if (direct) return direct;
+    if (!/^https?:\/\//i.test(data)) return null;
+    try {
+      const res = await fetch(data, {
+        method: "GET",
+        redirect: "follow",
+        headers: { Accept: "text/html", "User-Agent": "Tideline/1.0" },
+      });
+      const finalUrl = res.url || data;
+      const fromFinal = parseMapsPin(finalUrl);
+      if (fromFinal) return fromFinal;
+      const html = await res.text();
+      const canonical = html.match(
+        /<link[^>]+rel=["']canonical["'][^>]+href=["']([^"']+)["']/i,
+      );
+      if (canonical?.[1]) {
+        const fromCanon = parseMapsPin(canonical[1]);
+        if (fromCanon) return fromCanon;
+      }
+      return parseMapsPin(html.slice(0, 8000));
+    } catch {
+      return null;
+    }
   });
 
 const createSpotSchema = z.object({
