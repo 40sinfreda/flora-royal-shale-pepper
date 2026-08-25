@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="Suunto">
+  <trk>
+    <name>Kinneret Saturday loop</name>
+    <trkseg>
+      <trkpt lat="32.7950" lon="35.5420"><time>2026-08-16T04:02:00Z</time></trkpt>
+      <trkpt lat="32.7984" lon="35.5455"><time>2026-08-16T04:08:00Z</time></trkpt>
+      <trkpt lat="32.8018" lon="35.5490"><time>2026-08-16T04:14:00Z</time></trkpt>
+      <trkpt lat="32.8050" lon="35.5460"><time>2026-08-16T04:20:00Z</time></trkpt>
+      <trkpt lat="32.8012" lon="35.5428"><time>2026-08-16T04:26:00Z</time></trkpt>
+      <trkpt lat="32.7974" lon="35.5410"><time>2026-08-16T04:32:00Z</time></trkpt>
+      <trkpt lat="32.7951" lon="35.5421"><time>2026-08-16T04:38:00Z</time></trkpt>
+    </trkseg>
+  </trk>
+</gpx>

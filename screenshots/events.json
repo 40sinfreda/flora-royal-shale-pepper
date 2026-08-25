@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8080/events",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "Tideline",
+      "hasCanvas": false,
+      "bodyTextLen": 1921,
+      "bodyTextHash": "6d1bbc25726401109753bf94be93bbef8b64bc2182780faf4d3c6abb9617d402",
+      "bodyTextPrefix": "Tideline Tide Spots Gatherings Log a swim Sign in GATHERINGS Swi",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/events.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "Tideline",
+      "hasCanvas": false,
+      "bodyTextLen": 1880,
+      "bodyTextHash": "cc29f888cb064513e849fd47e91a643f5c9465b5f110c046e24aa2dd0df6978d",
+      "bodyTextPrefix": "Tideline GATHERINGS Swim with a pod Dawn loops, channel windows,",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/events-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/events.json"
+}

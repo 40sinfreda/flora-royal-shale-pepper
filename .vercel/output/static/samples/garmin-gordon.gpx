@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="Garmin Connect">
+  <metadata>
+    <name>Gordon dawn open water</name>
+    <time>2026-08-20T03:12:00Z</time>
+  </metadata>
+  <trk>
+    <name>Open water swim</name>
+    <type>open_water</type>
+    <trkseg>
+      <trkpt lat="32.0838" lon="34.7634"><time>2026-08-20T03:12:00Z</time></trkpt>
+      <trkpt lat="32.0854" lon="34.7640"><time>2026-08-20T03:14:20Z</time></trkpt>
+      <trkpt lat="32.0871" lon="34.7646"><time>2026-08-20T03:16:40Z</time></trkpt>
+      <trkpt lat="32.0888" lon="34.7652"><time>2026-08-20T03:19:00Z</time></trkpt>
+      <trkpt lat="32.0906" lon="34.7659"><time>2026-08-20T03:21:20Z</time></trkpt>
+      <trkpt lat="32.0923" lon="34.7666"><time>2026-08-20T03:23:40Z</time></trkpt>
+      <trkpt lat="32.0940" lon="34.7673"><time>2026-08-20T03:26:00Z</time></trkpt>
+      <trkpt lat="32.0958" lon="34.7680"><time>2026-08-20T03:28:20Z</time></trkpt>
+      <trkpt lat="32.0941" lon="34.7674"><time>2026-08-20T03:30:40Z</time></trkpt>
+      <trkpt lat="32.0924" lon="34.7668"><time>2026-08-20T03:33:00Z</time></trkpt>
+      <trkpt lat="32.0907" lon="34.7661"><time>2026-08-20T03:35:20Z</time></trkpt>
+      <trkpt lat="32.0890" lon="34.7655"><time>2026-08-20T03:37:40Z</time></trkpt>
+      <trkpt lat="32.0872" lon="34.7648"><time>2026-08-20T03:40:00Z</time></trkpt>
+      <trkpt lat="32.0855" lon="34.7642"><time>2026-08-20T03:42:20Z</time></trkpt>
+      <trkpt lat="32.0839" lon="34.7635"><time>2026-08-20T03:44:40Z</time></trkpt>
+    </trkseg>
+  </trk>
+</gpx>

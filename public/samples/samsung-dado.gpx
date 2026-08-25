@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="Samsung Health">
+  <trk>
+    <name>Haifa Dado morning</name>
+    <trkseg>
+      <trkpt lat="32.7940" lon="34.9890"><time>2026-08-18T03:45:00Z</time></trkpt>
+      <trkpt lat="32.7962" lon="34.9874"><time>2026-08-18T03:49:00Z</time></trkpt>
+      <trkpt lat="32.7985" lon="34.9858"><time>2026-08-18T03:53:00Z</time></trkpt>
+      <trkpt lat="32.8008" lon="34.9842"><time>2026-08-18T03:57:00Z</time></trkpt>
+      <trkpt lat="32.7984" lon="34.9859"><time>2026-08-18T04:01:00Z</time></trkpt>
+      <trkpt lat="32.7960" lon="34.9876"><time>2026-08-18T04:05:00Z</time></trkpt>
+      <trkpt lat="32.7941" lon="34.9891"><time>2026-08-18T04:09:00Z</time></trkpt>
+    </trkseg>
+  </trk>
+</gpx>

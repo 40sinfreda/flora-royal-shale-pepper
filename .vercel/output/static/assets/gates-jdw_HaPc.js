@@ -1,0 +1,1 @@
+import{t as e}from"./react-SIfiwpqq.js";import{o as t}from"./useStore-DCim0WvV.js";import{t as n}from"./useNavigate-D0FwvTeE.js";e();var r=t(),i=`/login`;function a({to:e=i}){if(typeof window<`u`){let e=window.location.pathname+window.location.search;if(e&&!e.startsWith(`/login`))try{sessionStorage.setItem(`tideline-next`,e)}catch{}}return(0,r.jsx)(n,{to:e})}export{a as t};

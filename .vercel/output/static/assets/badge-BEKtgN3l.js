@@ -1,0 +1,1 @@
+import{r as e}from"./button-Cmzo6Asj.js";import{o as t}from"./useStore-DCim0WvV.js";var n=t();function r({className:t,...r}){return(0,n.jsx)(`span`,{className:e(`inline-flex items-center rounded-full bg-raised px-2.5 py-1 text-[11px] font-medium uppercase tracking-[0.14em] text-muted`,t),...r})}export{r as t};

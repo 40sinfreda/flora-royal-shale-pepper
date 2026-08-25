@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8080/login",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "Tideline",
+      "hasCanvas": false,
+      "bodyTextLen": 337,
+      "bodyTextHash": "00130043413faf11d97ecc7d8348df569740b063b3622b1e74ea24bf6416d54e",
+      "bodyTextPrefix": "Tideline OPEN WATER Come in. The water is waiting. Chart spots f",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/login.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "Tideline",
+      "hasCanvas": false,
+      "bodyTextLen": 174,
+      "bodyTextHash": "f84d162b89158be42d9fd5dfec810db7827e7fc63bee473f4be79e7f810cc2ee",
+      "bodyTextPrefix": "Tideline Sign in Welcome back. Your logbook is on the other side",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/login-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/login.json"
+}

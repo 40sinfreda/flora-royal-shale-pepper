@@ -1,0 +1,1 @@
+var e=[`sea`,`ocean`,`lake`,`river`],t=[`gentle`,`moderate`,`challenging`,`extreme`],n=[`glass`,`chop`,`swell`,`wind`],r=[`euphoric`,`solid`,`worked`,`epic`];export{e as i,t as n,r,n as t};

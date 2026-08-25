@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8080/spots",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "Tideline",
+      "hasCanvas": false,
+      "bodyTextLen": 434,
+      "bodyTextHash": "69eb6f334ac64a6fb2d21515c569ccc3f4a91a975d1238ecea6d98cb68716fc9",
+      "bodyTextPrefix": "Tideline Tide Spots Gatherings Log a swim Sign in ATLAS Charted ",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/spots.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "Tideline",
+      "hasCanvas": false,
+      "bodyTextLen": 4415,
+      "bodyTextHash": "45c340eeec7a0031e66d2523a12ce9fb9998af7140887edef7276e94ace40219",
+      "bodyTextPrefix": "Tideline ATLAS Charted waters Seas, lakes, channels and city bea",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/spots-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/spots.json"
+}

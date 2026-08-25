@@ -1,0 +1,1 @@
+import{r as e}from"./button-Cmzo6Asj.js";import{o as t}from"./useStore-DCim0WvV.js";var n=t();function r({className:t}){return(0,n.jsx)(`div`,{className:e(`animate-pulse rounded-md bg-raised`,t),"aria-hidden":!0})}export{r as t};
